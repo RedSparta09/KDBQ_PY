@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 20 14.3% 4.1%;
+  --muted: 60 4.8% 95.9%;
+  --muted-foreground: 25 5.3% 44.7%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 20 14.3% 4.1%;
+  --card: 0 0% 100%;
+  --card-foreground: 20 14.3% 4.1%;
+  --border: 20 5.9% 90%;
+  --input: 20 5.9% 90%;
+  --primary: 207 90% 54%;
+  --primary-foreground: 211 100% 99%;
+  --secondary: 107 90% 28%;
+  --secondary-foreground: 60 9.1% 97.8%;
+  --accent: 60 4.8% 95.9%;
+  --accent-foreground: 24 9.8% 10%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 60 9.1% 97.8%;
+  --ring: 20 14.3% 4.1%;
+  --radius: 0.5rem;
+  --error: 0 72% 43%;
+  --dark-deeper: 240 3.7% 12%;
+  --dark: 240 3.7% 15%;
+  --dark-lighter: 240 3.7% 20%;
+  --syntax-blue: 208 75% 59%;
+  --syntax-orange: 19 69% 64%;
+  --syntax-yellow: 47 71% 70%;
+  --syntax-green: 120 26% 38%;
+  --syntax-purple: 300 30% 65%;
+}
+
+.dark {
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  --popover: 240 10% 3.9%;
+  --popover-foreground: 0 0% 98%;
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --primary: 207 90% 54%;
+  --primary-foreground: 211 100% 99%;
+  --secondary: 107 90% 28%;
+  --secondary-foreground: 0 0% 98%;
+  --accent: 240 3.7% 15.9%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --ring: 240 4.9% 83.9%;
+  --error: 0 72% 43%;
+  --dark-deeper: 240 3.7% 12%;
+  --dark: 240 3.7% 15%;
+  --dark-lighter: 240 3.7% 20%;
+  --syntax-blue: 208 75% 59%;
+  --syntax-orange: 19 69% 64%;
+  --syntax-yellow: 47 71% 70%;
+  --syntax-green: 120 26% 38%;
+  --syntax-purple: 300 30% 65%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground overflow-hidden;
+    background-color: hsl(var(--dark-deeper));
+    color: white;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #1e1e1e;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #777;
+  }
+  
+  /* Split pane resizing */
+  .resize-handle {
+    position: absolute;
+    width: 100%;
+    height: 6px;
+    top: -3px;
+    cursor: ns-resize;
+    background: transparent;
+    z-index: 10;
+  }
+  .resize-handle-vertical {
+    position: absolute;
+    width: 6px;
+    height: 100%;
+    left: -3px;
+    cursor: ew-resize;
+    background: transparent;
+    z-index: 10;
+  }
+  .resize-handle:hover, .resize-handle-vertical:hover {
+    background: rgba(0, 120, 212, 0.3);
+  }
+  
+  /* Override Monaco editor styling */
+  .monaco-editor .margin {
+    background-color: hsl(var(--dark-deeper)) !important;
+  }
+  
+  .editor-line-numbers {
+    user-select: none;
+    text-align: right;
+    color: #858585;
+    padding-right: 8px;
+  }
+}
