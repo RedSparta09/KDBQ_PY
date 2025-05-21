@@ -139,31 +139,10 @@ const Editor: React.FC<EditorProps> = ({ language = 'q' }) => {
     }
   };
   
-  // Add Run button in the editor toolbar
-  useEffect(() => {
-    // Create a run button in the toolbar
-    const editorPanel = document.getElementById('editor-panel');
-    let runButton = document.getElementById('run-code-button');
-    
-    if (editorPanel && !runButton) {
-      runButton = document.createElement('button');
-      runButton.id = 'run-code-button';
-      runButton.className = 'absolute top-[70px] right-[20px] z-10 bg-[#0078d4] hover:bg-[#106ebe] text-white px-4 py-2 rounded flex items-center shadow-lg';
-      runButton.innerHTML = '<span class="mr-2">▶</span> Run Code (Ctrl+Enter)';
-      runButton.onclick = () => {
-        // Dispatch run-code event
-        window.dispatchEvent(new CustomEvent('run-code'));
-      };
-      
-      editorPanel.appendChild(runButton);
-    }
-    
-    return () => {
-      if (runButton) {
-        runButton.remove();
-      }
-    };
-  }, [showJupyter]);
+  // Add a direct run button in the UI
+  const handleRunButtonClick = () => {
+    window.dispatchEvent(new Event('run-code'));
+  };
 
   const handleClearConsole = () => {
     setOutput([]);
@@ -218,15 +197,27 @@ const Editor: React.FC<EditorProps> = ({ language = 'q' }) => {
             )}
             
             {/* Code editor main area */}
-            <CodeEditor 
-              onRunCode={handleRunCode}
-              initialValue={currentCode}
-              language={language}
-            />
+            <div className="flex-1 flex flex-col relative">
+              <CodeEditor 
+                onRunCode={handleRunCode}
+                initialValue={currentCode}
+                language={language}
+              />
+              
+              {/* Fixed run button */}
+              <button 
+                className="absolute top-4 right-4 z-10 bg-[#0078d4] hover:bg-[#106ebe] text-white px-4 py-2 rounded flex items-center shadow-lg"
+                onClick={handleRunButtonClick}
+              >
+                <span className="mr-2">▶</span> Run Code (Ctrl+Enter)
+              </button>
+            </div>
           </div>
           
-          {/* Console output area */}
-          <Console output={output} onClear={handleClearConsole} />
+          {/* Console output area - ensure it's visible */}
+          <div className="min-h-[200px]">
+            <Console output={output} onClear={handleClearConsole} />
+          </div>
         </div>
       )}
     </div>

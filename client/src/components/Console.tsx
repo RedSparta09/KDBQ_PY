@@ -61,7 +61,7 @@ const Console: React.FC<ConsoleProps> = ({ output, onClear }) => {
     <div 
       ref={consoleRef}
       className="border-t border-[#333333] relative flex flex-col bg-[#1e1e1e]"
-      style={{ height: `${consoleHeight}px` }}
+      style={{ height: `${consoleHeight}px`, minHeight: '200px', display: 'flex' }}
     >
       <div 
         className="resize-handle" 
