@@ -22,7 +22,7 @@ export const initPyodide = async (): Promise<PyodideInterface> => {
     try {
       console.log('Loading Pyodide...');
       const pyodide = await loadPyodide({
-        indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.23.4/full/',
+        indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.27.6/full/',
       });
       
       console.log('Pyodide loaded successfully');

@@ -11,16 +11,18 @@ import Editor from "@/pages/Editor";
 import Examples from "@/pages/Examples";
 import Resources from "@/pages/Resources";
 import AIPractice from "@/pages/AIPractice";
+import BookLearning from "@/pages/BookLearning";
 import StatusBar from "@/components/StatusBar";
 import { executePython } from "./lib/pythonInterpreter";
 import { executeQ } from "./lib/qInterpreter";
 
 function Router() {
-  const [activePanel, setActivePanel] = useState<'editor' | 'examples' | 'resources' | 'ai-practice'>(() => {
+  const [activePanel, setActivePanel] = useState<'editor' | 'examples' | 'resources' | 'ai-practice' | 'book-learning'>(() => {
     // Check localStorage for active panel preference
     const savedPanel = localStorage.getItem('active-panel');
     return (savedPanel === 'editor' || savedPanel === 'examples' || 
-           savedPanel === 'resources' || savedPanel === 'ai-practice') 
+           savedPanel === 'resources' || savedPanel === 'ai-practice' ||
+           savedPanel === 'book-learning') 
            ? savedPanel as any : 'editor';
   });
   

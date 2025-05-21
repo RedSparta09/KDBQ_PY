@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CodeEditor from '../components/CodeEditor';
 import Console from '../components/Console';
 import SnippetsPanel from '../components/SnippetsPanel';
+import JupyterInterface from '../components/JupyterInterface';
 import { executeQ } from '../lib/qInterpreter';
 import { executePython } from '../lib/pythonInterpreter';
 import { useCodeStorage } from '../hooks/useCodeStorage';
@@ -62,6 +63,11 @@ const Editor: React.FC<EditorProps> = ({ language = 'q' }) => {
   const [currentCode, setCurrentCode] = useState(initialCode);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
   const [showSnippets, setShowSnippets] = useState(!isMobile);
+  const [showJupyter, setShowJupyter] = useState<boolean>(() => {
+    // Get from localStorage if available
+    const savedPref = localStorage.getItem('jupyter-interface');
+    return savedPref === 'true';
+  });
   const { saveSnippet } = useCodeStorage();
   const fileExtension = language === 'q' ? '.q' : '.py';
 
@@ -144,34 +150,56 @@ const Editor: React.FC<EditorProps> = ({ language = 'q' }) => {
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden" id="editor-panel">
-      {/* Code Editor Area */}
-      <div className="flex-1 overflow-hidden">
-        <div className="h-full flex">
-          {/* Left sidebar with examples/snippets */}
-          {showSnippets && (
-            <SnippetsPanel onLoadSnippet={handleLoadSnippet} />
-          )}
-          
-          {!isMobile && !showSnippets && (
-            <button 
-              className="absolute left-16 top-1/2 z-10 bg-[#333333] p-1 rounded-r"
-              onClick={() => setShowSnippets(true)}
-            >
-              <i className="ri-arrow-right-s-line"></i>
-            </button>
-          )}
-          
-          {/* Code editor main area */}
-          <CodeEditor 
-            onRunCode={handleRunCode}
-            initialValue={currentCode}
-            language={language}
-          />
+      {/* Interface selection for Python */}
+      {language === 'python' && (
+        <div className="bg-[#252526] px-3 py-2 flex space-x-2 border-b border-[#333333]">
+          <button 
+            className={`px-3 py-1 text-sm rounded ${!showJupyter ? 'bg-[#0078d4] text-white' : 'bg-[#333333] text-gray-300'}`}
+            onClick={() => setShowJupyter(false)}
+          >
+            Standard Editor
+          </button>
+          <button 
+            className={`px-3 py-1 text-sm rounded ${showJupyter ? 'bg-[#0078d4] text-white' : 'bg-[#333333] text-gray-300'}`}
+            onClick={() => setShowJupyter(true)}
+          >
+            Jupyter Notebook
+          </button>
         </div>
-      </div>
+      )}
       
-      {/* Console output area */}
-      <Console output={output} onClear={handleClearConsole} />
+      {/* Code Editor Area */}
+      {language === 'python' && showJupyter ? (
+        <JupyterInterface />
+      ) : (
+        <div className="flex-1 overflow-hidden">
+          <div className="h-full flex">
+            {/* Left sidebar with examples/snippets */}
+            {showSnippets && (
+              <SnippetsPanel onLoadSnippet={handleLoadSnippet} />
+            )}
+            
+            {!isMobile && !showSnippets && (
+              <button 
+                className="absolute left-16 top-1/2 z-10 bg-[#333333] p-1 rounded-r"
+                onClick={() => setShowSnippets(true)}
+              >
+                <i className="ri-arrow-right-s-line"></i>
+              </button>
+            )}
+            
+            {/* Code editor main area */}
+            <CodeEditor 
+              onRunCode={handleRunCode}
+              initialValue={currentCode}
+              language={language}
+            />
+          </div>
+          
+          {/* Console output area */}
+          <Console output={output} onClear={handleClearConsole} />
+        </div>
+      )}
     </div>
   );
 };

@@ -1,8 +1,8 @@
 import React from 'react';
 
 interface SidebarProps {
-  activePanel: 'editor' | 'examples' | 'resources' | 'ai-practice';
-  setActivePanel: (panel: 'editor' | 'examples' | 'resources' | 'ai-practice') => void;
+  activePanel: 'editor' | 'examples' | 'resources' | 'ai-practice' | 'book-learning';
+  setActivePanel: (panel: 'editor' | 'examples' | 'resources' | 'ai-practice' | 'book-learning') => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ activePanel, setActivePanel }) => {
@@ -39,6 +39,14 @@ const Sidebar: React.FC<SidebarProps> = ({ activePanel, setActivePanel }) => {
         onClick={() => setActivePanel('ai-practice')}
       >
         <i className="ri-robot-line text-xl"></i>
+      </button>
+      <button 
+        id="nav-book-learning" 
+        className={`p-2 rounded mb-4 hover:bg-[#333333] ${activePanel === 'book-learning' ? 'text-[#0078d4] bg-[#333333]' : 'text-white'}`} 
+        title="Book Learning"
+        onClick={() => setActivePanel('book-learning')}
+      >
+        <i className="ri-book-mark-line text-xl"></i>
       </button>
       <button 
         id="nav-settings" 
