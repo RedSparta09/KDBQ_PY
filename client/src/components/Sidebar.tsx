@@ -1,8 +1,8 @@
 import React from 'react';
 
 interface SidebarProps {
-  activePanel: 'editor' | 'examples' | 'resources';
-  setActivePanel: (panel: 'editor' | 'examples' | 'resources') => void;
+  activePanel: 'editor' | 'examples' | 'resources' | 'ai-practice';
+  setActivePanel: (panel: 'editor' | 'examples' | 'resources' | 'ai-practice') => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ activePanel, setActivePanel }) => {
@@ -31,6 +31,14 @@ const Sidebar: React.FC<SidebarProps> = ({ activePanel, setActivePanel }) => {
         onClick={() => setActivePanel('resources')}
       >
         <i className="ri-graduation-cap-line text-xl"></i>
+      </button>
+      <button 
+        id="nav-ai-practice" 
+        className={`p-2 rounded mb-4 hover:bg-[#333333] ${activePanel === 'ai-practice' ? 'text-[#0078d4] bg-[#333333]' : 'text-white'}`} 
+        title="AI Practice"
+        onClick={() => setActivePanel('ai-practice')}
+      >
+        <i className="ri-robot-line text-xl"></i>
       </button>
       <button 
         id="nav-settings" 

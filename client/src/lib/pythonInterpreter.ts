@@ -105,7 +105,7 @@ stdout, stderr = capture.get_output()
     
     if (stdout) {
       const stdoutLines = stdout.toString().split('\n');
-      stdoutLines.forEach(line => {
+      stdoutLines.forEach((line: string) => {
         if (line.trim()) {
           output.push(`<div class="text-white">${line}</div>`);
         }
@@ -114,7 +114,7 @@ stdout, stderr = capture.get_output()
     
     if (stderr) {
       const stderrLines = stderr.toString().split('\n');
-      stderrLines.forEach(line => {
+      stderrLines.forEach((line: string) => {
         if (line.trim()) {
           output.push(`<div class="text-[#d83b01]">${line}</div>`);
         }

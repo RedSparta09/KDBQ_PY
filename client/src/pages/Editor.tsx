@@ -3,9 +3,10 @@ import CodeEditor from '../components/CodeEditor';
 import Console from '../components/Console';
 import SnippetsPanel from '../components/SnippetsPanel';
 import { executeQ } from '../lib/qInterpreter';
+import { executePython } from '../lib/pythonInterpreter';
 import { useCodeStorage } from '../hooks/useCodeStorage';
 
-const initialCode = `// Create a simple table
+const initialQCode = `// Create a simple table
 trade: ([] 
     date: 2023.10.01 2023.10.01 2023.10.02;
     sym: \`AAPL\`MSFT\`AAPL;
@@ -21,12 +22,53 @@ calculateVWAP: {[table]
     select vwap: sum[price*size]%sum size by sym from table
 };`;
 
-const Editor: React.FC = () => {
+const initialPythonCode = `# Python Example
+import math
+
+def calculate_stats(numbers):
+    """Calculate basic statistics for a list of numbers"""
+    total = sum(numbers)
+    count = len(numbers)
+    average = total / count
+    
+    # Calculate standard deviation
+    variance = sum((x - average) ** 2 for x in numbers) / count
+    std_dev = math.sqrt(variance)
+    
+    return {
+        "count": count,
+        "sum": total,
+        "average": average,
+        "minimum": min(numbers),
+        "maximum": max(numbers),
+        "std_dev": std_dev
+    }
+
+# Test the function
+data = [10, 15, 20, 25, 30]
+result = calculate_stats(data)
+
+# Print results
+for key, value in result.items():
+    print(f"{key}: {value}")`;
+
+interface EditorProps {
+  language?: 'q' | 'python';
+}
+
+const Editor: React.FC<EditorProps> = ({ language = 'q' }) => {
+  const initialCode = language === 'q' ? initialQCode : initialPythonCode;
   const [output, setOutput] = useState<string[]>([]);
   const [currentCode, setCurrentCode] = useState(initialCode);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
   const [showSnippets, setShowSnippets] = useState(!isMobile);
   const { saveSnippet } = useCodeStorage();
+  const fileExtension = language === 'q' ? '.q' : '.py';
+
+  useEffect(() => {
+    // Update current code based on language change
+    setCurrentCode(language === 'q' ? initialQCode : initialPythonCode);
+  }, [language]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -37,19 +79,48 @@ const Editor: React.FC = () => {
     };
 
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    
+    // Listen for file upload events
+    const handleFileUpload = (e: any) => {
+      if (e.detail && e.detail.content && e.detail.fileName) {
+        setCurrentCode(e.detail.content);
+        
+        // Dispatch event to load the file into the editor
+        const loadEvent = new CustomEvent('load-snippet', { 
+          detail: { code: e.detail.content } 
+        });
+        window.dispatchEvent(loadEvent);
+      }
+    };
+    
+    window.addEventListener('file-upload', handleFileUpload);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('file-upload', handleFileUpload);
+    };
   }, []);
 
-  const handleRunCode = (code: string) => {
+  const handleRunCode = async (code: string) => {
     setCurrentCode(code);
     setOutput(prev => [...prev, '<div class="text-[#6A9955]">// Executing code...</div>']);
     
     try {
-      const result = executeQ(code);
-      setOutput(prev => [...prev, ...result]);
+      let result;
       
-      // Also save this code snippet
-      saveSnippet('main.q', code);
+      if (language === 'q') {
+        // Execute Q code
+        result = executeQ(code);
+        // Save the snippet
+        saveSnippet(`main${fileExtension}`, code);
+      } else {
+        // Execute Python code
+        result = await executePython(code);
+        // Save the snippet
+        saveSnippet(`main${fileExtension}`, code);
+      }
+      
+      setOutput(prev => [...prev, ...result]);
     } catch (error) {
       if (error instanceof Error) {
         setOutput(prev => [...prev, `<div class="text-[#d83b01]">Error: ${error.message}</div>`]);
@@ -94,6 +165,7 @@ const Editor: React.FC = () => {
           <CodeEditor 
             onRunCode={handleRunCode}
             initialValue={currentCode}
+            language={language}
           />
         </div>
       </div>
