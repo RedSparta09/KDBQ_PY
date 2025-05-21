@@ -32,7 +32,7 @@ function Router() {
     return (savedLanguage === 'python' ? 'python' : 'q') as 'q' | 'python';
   });
 
-  // Handle panel navigation
+  // Handle panel navigation and update page title
   useEffect(() => {
     const handleNavigation = (e: any) => {
       if (e.detail && e.detail.panel) {
@@ -43,10 +43,34 @@ function Router() {
     
     window.addEventListener('navigate', handleNavigation);
     
+    // Update page title based on active panel
+    const titleElement = document.getElementById('page-title');
+    if (titleElement) {
+      switch (activePanel) {
+        case 'editor':
+          titleElement.textContent = `${language.toUpperCase()} Code Editor`;
+          break;
+        case 'examples':
+          titleElement.textContent = `${language.toUpperCase()} Examples`;
+          break;
+        case 'resources':
+          titleElement.textContent = `${language.toUpperCase()} Learning Resources`;
+          break;
+        case 'ai-practice':
+          titleElement.textContent = 'AI Practice Generator';
+          break;
+        case 'book-learning':
+          titleElement.textContent = 'Book Learning & Testing';
+          break;
+        default:
+          titleElement.textContent = 'Code Learning Environment';
+      }
+    }
+    
     return () => {
       window.removeEventListener('navigate', handleNavigation);
     };
-  }, []);
+  }, [activePanel, language]);
 
   // Handle language changes
   const handleLanguageChange = (newLanguage: 'q' | 'python') => {

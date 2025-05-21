@@ -40,7 +40,7 @@ const Navbar: React.FC<NavbarProps> = ({ onLanguageChange }) => {
   return (
     <header className="bg-[#252526] px-4 py-2 flex items-center justify-between border-b border-[#333333]">
       <div className="flex items-center">
-        <h1 className="text-xl font-semibold text-[#0078d4] mr-4">Code Learning Environment</h1>
+        <h1 className="text-xl font-semibold text-[#0078d4] mr-4" id="page-title">Code Learning Environment</h1>
         <div className="flex space-x-2 items-center">
           <div className="flex items-center mr-4">
             <label htmlFor="language-select" className="text-white text-sm mr-2">Language:</label>

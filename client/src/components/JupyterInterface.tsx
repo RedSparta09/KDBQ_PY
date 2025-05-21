@@ -31,6 +31,23 @@ const JupyterInterface: React.FC = () => {
       cellRefs.current[activeCell]?.focus();
     }
   }, [activeCell]);
+  
+  // Handle keyboard shortcuts (Shift+Enter to run cell)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && e.shiftKey) {
+        e.preventDefault();
+        if (activeCell) {
+          executeCell(activeCell);
+        }
+      }
+    };
+    
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [activeCell]);
 
   const generateCellId = (): string => {
     return `cell-${Date.now()}`;
