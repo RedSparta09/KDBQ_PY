@@ -1,0 +1,75 @@
+I want to build a full-featured browser-based code learning app using TypeScript, Node.js, and React with Vite.
+
+Here are the complete features and modules I want. Please help me scaffold and implement the project step by step:
+
+---
+
+🔀 LANGUAGE TOGGLE:
+
+- Add a dropdown in the header: “Language: Q | Python”
+- When Q is selected:
+  - Show a basic Q code editor with console (can use CodeMirror or Monaco)
+- When Python is selected:
+  - Show:
+    - Code editor with Pyodide backend (run Python in browser)
+    - Option to switch to JupyterLab interface using JupyterLite embedded
+- Save selected language to localStorage to preserve setting on reload
+
+---
+
+🧪 AI QUESTION + TEST GENERATOR (SHARED ACROSS LANGUAGES):
+
+Add a new tab called **"AI Practice"** with two sections:
+
+### Section 1: Generate Single Question
+- Inputs:
+  - Language: [Q | Python]
+  - Difficulty: [Easy | Medium | Hard]
+- Output: 1 AI-generated coding question (title, description, sample I/O)
+
+### Section 2: Generate Full Test
+- Inputs:
+  - Language: [Q | Python]
+  - Difficulty
+  - Number of Questions
+  - Time Duration (mins)
+- Output: Full test paper with a countdown timer
+- Questions should be stored in session or state
+
+---
+
+🔐 API PROVIDER SUPPORT:
+
+- Let users choose from:
+  - OpenAI
+  - Gemini (Google AI Studio)
+  - DeepSeek
+  - Mistral (optional)
+- User can input the **API key** in a secure input modal
+- Keys should be saved securely in `localStorage` and used for making API calls
+- Normalize prompts so all providers receive same question format
+
+---
+
+📂 LOCAL FILE READING:
+
+- Allow users to upload `.txt`, `.csv`, `.json`, `.py`, or `.q` files
+- Display file content in the editor area
+- For Python, show option to read local data into a variable
+- For Q, show how to load using `0:` or system file read
+
+---
+
+⚙️ DEV CONFIG FIXES:
+
+- Fix `[plugin:runtime-error-plugin] Canceled` error:
+  - In `vite.config.ts`, set `server.hmr.overlay: false`
+
+```ts
+export default defineConfig({
+  server: {
+    hmr: {
+      overlay: false,
+    },
+  },
+});
