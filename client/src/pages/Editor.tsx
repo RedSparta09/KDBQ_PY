@@ -138,6 +138,32 @@ const Editor: React.FC<EditorProps> = ({ language = 'q' }) => {
       }
     }
   };
+  
+  // Add Run button in the editor toolbar
+  useEffect(() => {
+    // Create a run button in the toolbar
+    const editorPanel = document.getElementById('editor-panel');
+    let runButton = document.getElementById('run-code-button');
+    
+    if (editorPanel && !runButton) {
+      runButton = document.createElement('button');
+      runButton.id = 'run-code-button';
+      runButton.className = 'absolute top-[70px] right-[20px] z-10 bg-[#0078d4] hover:bg-[#106ebe] text-white px-4 py-2 rounded flex items-center shadow-lg';
+      runButton.innerHTML = '<span class="mr-2">▶</span> Run Code (Ctrl+Enter)';
+      runButton.onclick = () => {
+        // Dispatch run-code event
+        window.dispatchEvent(new CustomEvent('run-code'));
+      };
+      
+      editorPanel.appendChild(runButton);
+    }
+    
+    return () => {
+      if (runButton) {
+        runButton.remove();
+      }
+    };
+  }, [showJupyter]);
 
   const handleClearConsole = () => {
     setOutput([]);
