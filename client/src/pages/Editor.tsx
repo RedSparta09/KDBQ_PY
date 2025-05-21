@@ -74,7 +74,10 @@ const Editor: React.FC<EditorProps> = ({ language = 'q' }) => {
   useEffect(() => {
     // Update current code based on language change
     setCurrentCode(language === 'q' ? initialQCode : initialPythonCode);
-  }, [language]);
+    
+    // Save Jupyter interface preference
+    localStorage.setItem('jupyter-interface', showJupyter.toString());
+  }, [language, showJupyter]);
 
   useEffect(() => {
     const handleResize = () => {

@@ -69,6 +69,7 @@ function Router() {
           {activePanel === 'examples' && <Examples />}
           {activePanel === 'resources' && <Resources />}
           {activePanel === 'ai-practice' && <AIPractice />}
+          {activePanel === 'book-learning' && <BookLearning />}
         </div>
       </div>
       

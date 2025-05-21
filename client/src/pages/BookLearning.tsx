@@ -116,7 +116,7 @@ const BookLearning: React.FC = () => {
           prev ? { ...prev, timeRemaining: prev.timeRemaining - 1 } : null
         );
       }, 1000);
-    } else if (activeTest?.timeRemaining <= 0 && activeTest?.isActive) {
+    } else if (activeTest && activeTest.timeRemaining <= 0 && activeTest.isActive) {
       setTests(prev => 
         prev.map(test => 
           test.id === activeTest.id 
